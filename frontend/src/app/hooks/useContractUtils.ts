@@ -77,12 +77,12 @@ import { web3FromSource } from '@polkadot/extension-dapp';
   
             const { signer } = await web3FromSource(userMetaSource);
   
+            // [TODO]: prepaid deleted
             const transferExtrinsic = api.message.send({
                 destination: programId,
                 payload,
                 gasLimit: gasToSpend(totalGas),
                 value,
-                prepaid: true,
                 account: userAddress
             }, currentProgramMetadata);
   
@@ -172,12 +172,12 @@ import { web3FromSource } from '@polkadot/extension-dapp';
   
             console.log("Gas to spend: ", gasToSpend(totalGas));
   
+            // [TODO]: prepaid deleted
             const baseMessage: MessageSendOptions = {
                 destination: programId,
                 payload,
                 gasLimit: gasToSpend(totalGas),
                 value,
-                prepaid: true,
             };
   
             const sendExtrinsic = api.message.send(baseMessage, actualProgramMetadata);
@@ -271,13 +271,13 @@ import { web3FromSource } from '@polkadot/extension-dapp';
   
             const { signer } = await web3FromSource(userMetaSource);
   
+            // [TODO]: prepaid deleted
             const transferExtrinsic = api.message.send({
                 destination: programId,
                 payload,
                 gasLimit: gasToSpend(totalGas),
                 value,
-                prepaid: false,
-                account: userAddress
+                account: userAddress,
             }, actualProgramMetadata);
   
             try {

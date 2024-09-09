@@ -13,3 +13,4 @@ export { ReactComponent as ChevronsRight } from './icons/chevrons-right.svg';
 export { ReactComponent as CaretDown } from './icons/caret-down.svg';
 export { ReactComponent as CopyDecoded } from './icons/copy-decoded.svg';
 export { ReactComponent as AvaVaraBlack } from './icons/ava-vara-black.svg';
+export { ReactComponent as UserIcon } from './icons/user-icon.svg';

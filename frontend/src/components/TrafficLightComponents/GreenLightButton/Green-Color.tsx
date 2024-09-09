@@ -1,44 +1,83 @@
-import { useAccount, useAlert } from "@gear-js/react-hooks";
-import { web3FromSource } from "@polkadot/extension-dapp";
+import { useState } from "react"; 
+import { useAlert } from "@gear-js/react-hooks";
 import { Button } from "@chakra-ui/react";
 import { useSailsCalls } from "@/app/hooks";
+import { useDappContext } from "@/Context";
+import { SignlessForm } from "@/components/SignlessForm/SignlessForm";
+import { addTokensToVoucher, renewVoucher, encryptString } from "@/app/utils";
+import { decodeAddress, HexString } from "@gear-js/api";
+import { KeyringPair } from '@polkadot/keyring/types';
 
-function GreenColor() {
+const GreenColor = () => {
   const sails = useSailsCalls();
   const alert = useAlert();
-  const { accounts, account } = useAccount();
+  const { 
+    signlessAccount, 
+    currentVoucherId ,
+    noWalletSignlessAccountName,
+    sailsIsBusy,
+    setSailsIsBusy
+  } = useDappContext();
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const signer = async () => {
-    if (!accounts) {
-      alert.error('Accounts is not ready');
+  const sendMessage = async (encryptedName: string, signer: KeyringPair, voucherId: HexString) => {
+    if (!sails) {
+      alert.error('sails is not ready');
       return;
     }
 
-    const localaccount = account?.address;
-    const isVisibleAccount = accounts.some(
-      (visibleAccount) => visibleAccount.address === localaccount
-    );
+    setSailsIsBusy(true);
 
-    if (isVisibleAccount) {
-      if (!sails) {
-        alert.error('sails is not ready');
-        return;
-      }
+    const decodedAddress = decodeAddress(signer.address);
 
-      if (!account || !accounts) {
-        alert.error('Account is not ready');
-        return;
-      }
+    try {
+      await addTokensToVoucher(
+        sails,
+        decodedAddress,
+        voucherId,
+        1, // On token to add
+        2, // Min amount of tokens from voucher
+        {
+          onLoad() { alert.info('Will add tokens to voucher!') },
+          onSuccess() { alert.success('Tokens added to voucher!') },
+          onError() { alert.error('Erro while adding tokens to voucher') }
+        }
+      );
+    } catch (e) {
+      setSailsIsBusy(false);
+      console.error(e);
+      return;
+    }
 
-      const { signer } = await web3FromSource(accounts[0].meta.source);
+    try {
+      await renewVoucher(
+        sails,
+        decodedAddress,
+        voucherId,
+        1_200, // 1200 blocks (one hour)
+        {
+          onLoad() { alert.info('Will renew voucher!') },
+          onSuccess() { alert.success('Voucher renewed!') },
+          onError() { alert.error('Error while renewing voucher') }
+        }
+      )
+    } catch (e) {
+      setSailsIsBusy(false);
+      console.error(e);
+      return;
+    }
 
+    console.log('Se mandara mensaje!!!');
+
+    try {
       const response = await sails.command(
         'TrafficLight/Green',
+        signer,
         {
-          userAddress: account.decodedAddress,
-          signer
-        },
-        {
+          voucherId,
+          callArguments: [
+            encryptedName
+          ],
           callbacks: {
             onLoad() { alert.info('Will send a message'); },
             onBlock(blockHash) { alert.success(`In block: ${blockHash}`); },
@@ -47,17 +86,52 @@ function GreenColor() {
           }
         }
       );
-
-      console.log(`response: ${response}`);
-    } else {
-      alert.error("Account not available to sign");
+  
+      console.log('Response: ', response);
+    } catch(e) {
+      console.error(e);
     }
+
+    setSailsIsBusy(false);
+  }
+
+  const signer = async () => {
+    if (!signlessAccount || !currentVoucherId || !noWalletSignlessAccountName) {
+      alert.error('User is not logged in');
+      setModalOpen(true);
+      return;
+    }
+
+    await sendMessage(
+      encryptString(noWalletSignlessAccountName), 
+      signlessAccount, 
+      currentVoucherId
+    );
   };
 
   return (
-    <Button backgroundColor="green.300" onClick={signer}>
-      Green
-    </Button>
+    <>
+      <Button 
+        backgroundColor="green.300" 
+        onClick={signer}
+        isLoading={sailsIsBusy}
+      >
+        Green
+      </Button>
+      {
+        modalOpen && 
+        <SignlessForm 
+          closeForm={
+            () => {
+              setModalOpen(false);
+            }
+          }
+          onGetKeyring={(userCodedName: string, keyring: KeyringPair, voucherId: HexString) => {
+            sendMessage(userCodedName, keyring, voucherId);
+          }}
+        /> 
+      }
+    </>
   );
 }
 

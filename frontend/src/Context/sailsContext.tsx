@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import SailsCalls from "@/app/SailsCalls";
 
 interface Props {
@@ -8,11 +8,6 @@ interface Props {
 interface SailsContextI {
     sails: SailsCalls | null,
     setSails:  React.Dispatch<React.SetStateAction<SailsCalls | null>> | null
-}
-
-export interface InitSailsI {
-    idl?: string,
-    network?: string
 }
 
 export const sailsContext = createContext<SailsContextI>({
@@ -33,4 +28,16 @@ export const SailsProvider = ({ children }: Props) => {
             { children }
         </sailsContext.Provider>
     );
+}
+
+export const useSailsContext = () => {
+    const {
+        sails,
+        setSails
+    } = useContext(sailsContext);
+
+    return {
+        sails,
+        setSails: setSails as React.Dispatch<React.SetStateAction<SailsCalls | null>>
+    };
 }

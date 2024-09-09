@@ -1246,9 +1246,7 @@ export class SailsCalls {
     voucherBalance = (voucherId: HexString): Promise<number> => {
         return new Promise(async resolve => {
             const voucherBalance = await this.gearApi.balance.findOut(voucherId);
-            const voucherBalanceFormated = Number(
-                BigInt(voucherBalance.toString()) / 1_000_000_000_000n
-            );
+            const voucherBalanceFormated = Number(voucherBalance.toString()) / 1_000_000_000_000;
 
             resolve(voucherBalanceFormated);
         });

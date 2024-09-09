@@ -24,31 +24,61 @@ export const sponsorName = "";
 export const sponsorMnemonic = "";
 
 export const CONTRACT_DATA: ContractSails = {
-  programId: '0x40ee053ed5af803a3c68fa432e11a38c99422bbdec815bbf745d536077d7587a',
+  programId: '0xff07656ea367eecb3196bb897ddb39d272f035a9cfc258bd078d336927320a4c',
   idl: `
+    type QueryEvent = enum {
+      LastWhoCall: actor_id,
+      SignlessAccountAddress: opt actor_id,
+      SignlessAccountData: opt KeyringData,
+    };
+
+    type KeyringData = struct {
+      address: str,
+      encoded: str,
+    };
+
     type IoTrafficLightState = struct {
       current_light: str,
       all_users: vec struct { actor_id, str },
+    };
+
+    type SignlessEvent = enum {
+      NoWalletAccountSet,
+      Error: KeyringError,
+    };
+
+    type KeyringError = enum {
+      KeyringAddressAlreadyEsists,
+      UserDoesNotHasKeyringAccount,
+      KeyringAccountAlreadyExists,
+      SessionHasInvalidCredentials,
     };
 
     type TrafficLightEvent = enum {
       Green,
       Yellow,
       Red,
+      Error: KeyringError,
     };
 
     constructor {
       New : ();
     };
 
-    service Query {
+    service QueryService {
+      query KeyringAccountData : (keyring_address: actor_id) -> QueryEvent;
+      query KeyringAddressFromUserCodedName : (user_coded_name: str) -> QueryEvent;
       query TrafficLight : () -> IoTrafficLightState;
     };
 
+    service Signless {
+      BindKeyringDataToUserCodedName : (no_wallet_account: str, keyring_data: KeyringData) -> SignlessEvent;
+    };
+
     service TrafficLight {
-      Green : () -> TrafficLightEvent;
-      Red : () -> TrafficLightEvent;
-      Yellow : () -> TrafficLightEvent;
+      Green : (user_coded_name: str) -> TrafficLightEvent;
+      Red : (user_coded_name: str) -> TrafficLightEvent;
+      Yellow : (user_coded_name: str) -> TrafficLightEvent;
     };
   `
 };

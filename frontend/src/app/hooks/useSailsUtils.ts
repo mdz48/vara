@@ -1,15 +1,16 @@
-import { useState, useEffect, useContext } from "react";
-import SailsCalls from "../SailsCalls"
+import { useEffect, useContext } from "react";
 import { sailsContext } from "@/Context";
 import { HexString } from "@gear-js/api";
+import { SponsorData } from "../SailsCalls/types";
 
+import SailsCalls from "../SailsCalls";
 
 export interface InitSailsI {
     contractId?: HexString,
     idl?: string,
-    network?: string
+    network?: string,
+    vouchersSigner?: SponsorData
 }
-
 
 /**
  * ## hook that initializes an instance of Sails
@@ -64,6 +65,7 @@ export const useInitSails = async (data?: InitSailsI) => {
             let network = "";
             let contractId: HexString | undefined = undefined;
             let idl = undefined;
+            let voucherSignerData: SponsorData | undefined = undefined;
 
             if (data) {
                 contractId = data.contractId;
@@ -73,15 +75,20 @@ export const useInitSails = async (data?: InitSailsI) => {
                     ? data.network
                     : 'ws://localhost:9944';
 
+                voucherSignerData = data.vouchersSigner
+                    ? data.vouchersSigner
+                    : undefined;
             }
 
             const sailsInstance = await SailsCalls.new({
                 network,
                 contractId,
-                idl
+                idl,
+                voucherSignerData 
             });
 
             if (setSails) setSails(sailsInstance);
+            
         };
 
         initSails();

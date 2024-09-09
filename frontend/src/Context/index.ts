@@ -1,2 +1,2 @@
-export { dAppContext, DAppContextProvider } from "./dappContext";
-export { sailsContext, SailsProvider } from "./sailsContext";
+export { dAppContext, DAppContextProvider, useDappContext } from "./dappContext";
+export { sailsContext, SailsProvider, useSailsContext } from "./sailsContext";

@@ -1,4 +1,4 @@
-## Ping frontend
+## Web3 abstraction Frontend
 
 To install the dependencies you need to put in the console: 
 
@@ -50,7 +50,7 @@ export const CONTRACT_DATA: ContractSails = {
 };
 ```
 
-Then, yo have to go to the file: src/app.tsx
+Then, you have to go to the file: src/app.tsx
 
 In the lines 17 to 21 you can set your contract id and IDL, it will looks like this:
 

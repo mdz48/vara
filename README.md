@@ -82,6 +82,19 @@ cargo build --release
 
 ### Option 2: You can follow the steps above using gitpod!
 
+Note: si el compilador de rust tiene una versión anterior a la necesaria, tendras que actualizarla de la siguiente manera:
+
+```sh
+rustup install 1.80.1
+rustup default 1.80.1
+```
+
+In case that the compiler does not have the target 'wasm32-unknown-unknown', you need to install it with: 
+
+```sh
+rustup target add wasm32-unknown-unknown
+```
+
 <p align="center">
   <a href="https://gitpod.io/#https://github.com/Vara-Lab/Web3-Abstraction-Integration-Kit.git" target="_blank">
     <img src="https://gitpod.io/button/open-in-gitpod.svg" width="240" alt="Gitpod">

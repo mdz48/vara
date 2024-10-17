@@ -23,7 +23,7 @@ pub struct TrafficLightProgram;
 // Traffic light program, it host one or more services and it expose them to the 
 // externar consumer.
 // Only one program is allowed per application
-// #[program]
+#[program]
 impl TrafficLightProgram {
     // Application constructor (it is an associated function)
     // It can be called once per application lifetime.

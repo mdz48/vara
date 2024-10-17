@@ -18,16 +18,16 @@ export const ROUTES = {
 };
 
 // To use the example code, enter the details of the account that will pay the vouchers, etc. (name and mnemonic)
-export const sponsorName = "";
-export const sponsorMnemonic = "";
+export const sponsorName = "admindavid";
+export const sponsorMnemonic = "strong orchard plastic arena pyramid lobster lonely rich stomach label clog rubber";
 
 export const CONTRACT_DATA: ContractSails = {
-  programId: '0xff07656ea367eecb3196bb897ddb39d272f035a9cfc258bd078d336927320a4c',
+  programId: '0x2919436134c607fa3ada4ea17266f1a44da58bb0ca232222e3acce0c90bc6c8c',
   idl: `
-    type QueryEvent = enum {
-      LastWhoCall: actor_id,
-      SignlessAccountAddress: opt actor_id,
-      SignlessAccountData: opt KeyringData,
+    type TrafficLightEvent = enum {
+      Green,
+      Yellow,
+      Red,
     };
 
     type KeyringData = struct {
@@ -35,48 +35,46 @@ export const CONTRACT_DATA: ContractSails = {
       encoded: str,
     };
 
-    type IoTrafficLightState = struct {
-      current_light: str,
-      all_users: vec struct { actor_id, str },
-    };
-
-    type SignlessEvent = enum {
-      NoWalletAccountSet,
+    type KeyringEvent = enum {
+      KeyringAccountSet,
       Error: KeyringError,
     };
 
     type KeyringError = enum {
       KeyringAddressAlreadyEsists,
+      UserAddressAlreadyExists,
+      UserCodedNameAlreadyExists,
       UserDoesNotHasKeyringAccount,
       KeyringAccountAlreadyExists,
       SessionHasInvalidCredentials,
+      UserAndKeyringAddressAreTheSame,
     };
 
-    type TrafficLightEvent = enum {
-      Green,
-      Yellow,
-      Red,
-      Error: KeyringError,
+    type IoTrafficLightState = struct {
+      current_light: str,
+      all_users: vec struct { actor_id, str },
+    };
+
+    type KeyringQueryEvent = enum {
+      LastWhoCall: actor_id,
+      SignlessAccountAddress: opt actor_id,
+      SignlessAccountData: opt KeyringData,
     };
 
     constructor {
       New : ();
     };
 
-    service QueryService {
-      query KeyringAccountData : (keyring_address: actor_id) -> QueryEvent;
-      query KeyringAddressFromUserCodedName : (user_coded_name: str) -> QueryEvent;
-      query TrafficLight : () -> IoTrafficLightState;
-    };
-
-    service Signless {
-      BindKeyringDataToUserCodedName : (no_wallet_account: str, keyring_data: KeyringData) -> SignlessEvent;
-    };
-
     service TrafficLight {
-      Green : (user_coded_name: str) -> TrafficLightEvent;
-      Red : (user_coded_name: str) -> TrafficLightEvent;
-      Yellow : (user_coded_name: str) -> TrafficLightEvent;
+      Green : () -> TrafficLightEvent;
+      Red : () -> TrafficLightEvent;
+      Yellow : () -> TrafficLightEvent;
+      BindKeyringDataToUserAddress : (user_address: actor_id, keyring_data: KeyringData) -> KeyringEvent;
+      BindKeyringDataToUserCodedName : (user_coded_name: str, keyring_data: KeyringData) -> KeyringEvent;
+      query TrafficLight : () -> IoTrafficLightState;
+      query KeyringAccountData : (keyring_address: actor_id) -> KeyringQueryEvent;
+      query KeyringAddressFromUserAddress : (user_address: actor_id) -> KeyringQueryEvent;
+      query KeyringAddressFromUserCodedName : (user_coded_name: str) -> KeyringQueryEvent;
     };
   `
 };

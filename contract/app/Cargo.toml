@@ -7,6 +7,4 @@ license.workspace = true
 [dependencies]
 gstd.workspace = true
 sails-rs.workspace = true
-
-[build-dependencies]
-gear-wasm-builder.workspace = true
+keyring-service.workspace = true

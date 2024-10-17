@@ -1,76 +1,64 @@
 // necesary cretes
 use sails_rs::{
     prelude::*,
-    gstd::{
-        service,
-        msg
-    },
-    cell::{
-        RefMut,
-        Ref
-    }
+    gstd::msg
 };
 
-// import the states
-use crate::states::{
-    traffic_light_state::TrafficLightState,
-    keyring_state::{
-        KeyringAccounts,
-        KeyringError
-    }
+// import the state
+use crate::states::traffic_light_state::{
+    TrafficLightState,
+    IoTrafficLightState
+};
+
+use keyring_service::services::{
+    keyring_service::KeyringService,
+    keyring_query_service::KeyringQueryService
 };
 
 // Traffic light service struct to build the service 
-// Data is passed to the service as RefMut (command, this change the state)
-pub struct TrafficLightService<'a> {
-    pub state: RefMut<'a, TrafficLightState>,
-    pub keyring_state: Ref<'a, KeyringAccounts>
+pub struct TrafficLightService {
+    keyring_service: KeyringService,
+    keyring_query_service: KeyringQueryService
+}
+
+// Impl for seed related function to init the state
+impl TrafficLightService {
+    // Related function to init the service state (call only once)
+    // Another related function is created that initializes the state 
+    // to avoid unnecessary imports in the "lib.rs" file, you can see 
+    // that it remains more "structured"
+    pub fn seed() {
+        TrafficLightState::init_state();
+    }
 }
 
 // Trffic light service
-#[service]
-impl<'a> TrafficLightService<'a> {
+#[service(extends = [KeyringService, KeyringQueryService])]
+impl TrafficLightService {
     // Service constructor
-    pub fn new(
-        state: RefMut<'a, TrafficLightState>,
-        keyring_state: Ref<'a, KeyringAccounts>
-    ) -> Self {
+    pub fn new() -> Self {
         Self {
-            state,
-            keyring_state
+            keyring_service: KeyringService::new(),
+            keyring_query_service: KeyringQueryService::new()
         }
     }
 
     // Remote call "green" exposed to external consumers
     // Returns a struct that will be sent as a response to the user
     // Is treated as a command changing the state (&mut self)
-    pub fn green(
-        &mut self,
-        user_coded_name: String
-    ) -> TrafficLightEvent {
-        let keyring_address = msg::source();
-
-        // Check if the address is associated to the user coded name
-        let temp = self.keyring_state
-            .check_keyring_address_by_user_coded_name(
-                keyring_address, 
-                user_coded_name
-            );
-
-        // If temp is an Err, returns the error
-        if let Err(error) = temp {
-            return TrafficLightEvent::Error(error);
-        }
+    pub fn green(&mut self) -> TrafficLightEvent {
+        // // Get state as mut
+        // let traffic_light_state = traffic_light_state_mut();
 
         let current_light = "Green".to_string();
 
         // Changing state
-        self.state
+        TrafficLightState::state_mut()
             .current_light = current_light.clone();
-        
-        self.state
+
+        TrafficLightState::state_mut()
             .all_users
-            .insert(keyring_address, current_light);
+            .insert(msg::source().into(), current_light);
 
         // returning the response
         TrafficLightEvent::Green
@@ -79,71 +67,66 @@ impl<'a> TrafficLightService<'a> {
     // Remote call "yellow" exposed to external consumers
     // Returns a struct that will be sent as a response to the user
     // Is treated as a command changing the state (&mut self)
-    pub fn yellow(
-        &mut self,
-        user_coded_name: String
-    ) -> TrafficLightEvent {
-        let keyring_address = msg::source();
-
-        // Check if the address is associated to the user coded name
-        let temp = self.keyring_state
-            .check_keyring_address_by_user_coded_name(
-                keyring_address, 
-                user_coded_name
-            );
-
-        // If temp is an Err, returns the error
-        if let Err(error) = temp {
-            return TrafficLightEvent::Error(error);
-        }
+    pub fn yellow(&mut self) -> TrafficLightEvent {
+        // // Get state as mut
+        // let traffic_light_state = traffic_light_state_mut();
 
         let current_light = "Yellow".to_string();
 
         // Changing state
-        self.state
+        TrafficLightState::state_mut()
             .current_light = current_light.clone();
-        
-        self.state
+        TrafficLightState::state_mut()
             .all_users
-            .insert(keyring_address, current_light);
+            .insert(msg::source().into(), current_light);
 
         // returning the response
         TrafficLightEvent::Yellow
     }
 
-    // Remote call "Red" exposed to external consumers
+    // Remote call "yellow" exposed to external consumers
     // Returns a struct that will be sent as a response to the user
     // Is treated as a command changing the state (&mut self)
-    pub fn red(
-        &mut self,
-        user_coded_name: String
-    ) -> TrafficLightEvent {
-        let keyring_address = msg::source();
-
-        // Check if the address is associated to the user coded name
-        let temp = self.keyring_state
-            .check_keyring_address_by_user_coded_name(
-                keyring_address, 
-                user_coded_name
-            );
-
-        // If temp is an Err, returns the error
-        if let Err(error) = temp {
-            return TrafficLightEvent::Error(error);
-        }
+    pub fn red(&mut self) -> TrafficLightEvent {
+        // // Get state as mut
+        // let traffic_light_state = traffic_light_state_mut();
 
         let current_light = "Red".to_string();
 
         // Changing state
-        self.state
+        TrafficLightState::state_mut()
             .current_light = current_light.clone();
-        
-        self.state
+        TrafficLightState::state_mut()
             .all_users
-            .insert(keyring_address, current_light);
+            .insert(msg::source().into(), current_light);
 
         // returning the response
         TrafficLightEvent::Red
+    }
+
+    // Remote call "traffic_light" exposed to external consumers
+    // Returns a struct that will be sent as a response to the user
+    // Is treated as a query, keeping everything unchanged and returning some data. (&self)
+    pub fn traffic_light(&self) -> IoTrafficLightState {
+        TrafficLightState::state_ref()
+            .to_owned()
+            .into()
+    }
+}
+
+impl AsRef<KeyringService> for TrafficLightService {
+    fn as_ref(&self) -> &KeyringService {
+        // You have to return a reference to the attribute that 
+        // you specified to store the keyring service
+        &self.keyring_service
+    }
+}
+
+impl AsRef<KeyringQueryService> for TrafficLightService {
+    fn as_ref(&self) -> &KeyringQueryService {
+        // You have to return a reference to the attribute that 
+        // you specified to store the keyring query service
+        &self.keyring_query_service
     }
 }
 
@@ -155,8 +138,9 @@ impl<'a> TrafficLightService<'a> {
 pub enum TrafficLightEvent {
     Green,
     Yellow,
-    Red,
-    Error(KeyringError)
+    Red
 }
+
+
 
 

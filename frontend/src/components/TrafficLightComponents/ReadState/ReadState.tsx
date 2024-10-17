@@ -18,7 +18,7 @@ function ReadState() {
         return;
       }
   
-      const response = await sails.query('QueryService/TrafficLight');
+      const response = await sails.query('TrafficLight/TrafficLight');
   
       setFullState(response);
     }, 500);

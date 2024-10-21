@@ -12,43 +12,13 @@ A contract consists of two directories:
 
 ## Walletless feature
 
-This contract contains the signless and walletless feature, it extends the services "KeyringService" and  "KeyringQueryService" in "TrafficLightService" from the [keyring-service repository](https://github.com/Vara-Lab/Contracts-Services/tree/main/keyring-service)
+This contract contains the signless and walletless feature, it use the keyring service as an extra service, you can find it in the repository: [keyring-service repository](https://github.com/Vara-Lab/Contracts-Services/tree/main/keyring-service)
 
 ### Services
 
 - TrafficLightService:
 
-    This service extends both contracts `KeyringQueryService` and `KeyringService`, which will give all commands and querires of this services. It contains extra fields that will contains the extended services:
-    
-    ```rust
-    // Main service
-    pub struct TrafficLightService {
-        // To extend the wallet less service (and others services), yo need to create
-        // an atribute to "store" the service
-        keyring_service: KeyringService,
-        keyring_query_service: KeyringQueryService
-    }
-    ```
-
-    This implements the "AsRef" trait on keyring services, for service TrafficLightService which will extend said services:
-
-    ```rust
-    impl AsRef<KeyringService> for TrafficLightService {
-        fn as_ref(&self) -> &KeyringService {
-            // You have to return a reference to the attribute that 
-            // you specified to store the keyring service
-            &self.keyring_service
-        }
-    }
-
-    impl AsRef<KeyringQueryService> for TrafficLightService {
-        fn as_ref(&self) -> &KeyringQueryService {
-            // You have to return a reference to the attribute that 
-            // you specified to store the keyring query service
-            &self.keyring_query_service
-        }
-    }
-    ```
+    This service contains the logic to implement a traffic light.
 
 - KeyringService:
 

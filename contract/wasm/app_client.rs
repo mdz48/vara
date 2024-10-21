@@ -43,6 +43,161 @@ pub mod app_factory {
         }
     }
 }
+pub struct Keyring<R> {
+    remoting: R,
+}
+impl<R> Keyring<R> {
+    pub fn new(remoting: R) -> Self {
+        Self { remoting }
+    }
+}
+impl<R: Remoting + Clone> traits::Keyring for Keyring<R> {
+    type Args = R::Args;
+    fn bind_keyring_data_to_user_address(
+        &mut self,
+        user_address: ActorId,
+        keyring_data: KeyringData,
+    ) -> impl Call<Output = KeyringEvent, Args = R::Args> {
+        RemotingAction::<_, keyring::io::BindKeyringDataToUserAddress>::new(
+            self.remoting.clone(),
+            (user_address, keyring_data),
+        )
+    }
+    fn bind_keyring_data_to_user_coded_name(
+        &mut self,
+        user_coded_name: String,
+        keyring_data: KeyringData,
+    ) -> impl Call<Output = KeyringEvent, Args = R::Args> {
+        RemotingAction::<_, keyring::io::BindKeyringDataToUserCodedName>::new(
+            self.remoting.clone(),
+            (user_coded_name, keyring_data),
+        )
+    }
+    fn keyring_account_data(
+        &self,
+        keyring_address: ActorId,
+    ) -> impl Query<Output = KeyringQueryEvent, Args = R::Args> {
+        RemotingAction::<_, keyring::io::KeyringAccountData>::new(
+            self.remoting.clone(),
+            keyring_address,
+        )
+    }
+    fn keyring_address_from_user_address(
+        &self,
+        user_address: ActorId,
+    ) -> impl Query<Output = KeyringQueryEvent, Args = R::Args> {
+        RemotingAction::<_, keyring::io::KeyringAddressFromUserAddress>::new(
+            self.remoting.clone(),
+            user_address,
+        )
+    }
+    fn keyring_address_from_user_coded_name(
+        &self,
+        user_coded_name: String,
+    ) -> impl Query<Output = KeyringQueryEvent, Args = R::Args> {
+        RemotingAction::<_, keyring::io::KeyringAddressFromUserCodedName>::new(
+            self.remoting.clone(),
+            user_coded_name,
+        )
+    }
+}
+
+pub mod keyring {
+    use super::*;
+
+    pub mod io {
+        use super::*;
+        use sails_rs::calls::ActionIo;
+        pub struct BindKeyringDataToUserAddress(());
+        impl BindKeyringDataToUserAddress {
+            #[allow(dead_code)]
+            pub fn encode_call(user_address: ActorId, keyring_data: super::KeyringData) -> Vec<u8> {
+                <BindKeyringDataToUserAddress as ActionIo>::encode_call(&(
+                    user_address,
+                    keyring_data,
+                ))
+            }
+        }
+        impl ActionIo for BindKeyringDataToUserAddress {
+            const ROUTE: &'static [u8] = &[
+                28, 75, 101, 121, 114, 105, 110, 103, 112, 66, 105, 110, 100, 75, 101, 121, 114,
+                105, 110, 103, 68, 97, 116, 97, 84, 111, 85, 115, 101, 114, 65, 100, 100, 114, 101,
+                115, 115,
+            ];
+            type Params = (ActorId, super::KeyringData);
+            type Reply = super::KeyringEvent;
+        }
+        pub struct BindKeyringDataToUserCodedName(());
+        impl BindKeyringDataToUserCodedName {
+            #[allow(dead_code)]
+            pub fn encode_call(
+                user_coded_name: String,
+                keyring_data: super::KeyringData,
+            ) -> Vec<u8> {
+                <BindKeyringDataToUserCodedName as ActionIo>::encode_call(&(
+                    user_coded_name,
+                    keyring_data,
+                ))
+            }
+        }
+        impl ActionIo for BindKeyringDataToUserCodedName {
+            const ROUTE: &'static [u8] = &[
+                28, 75, 101, 121, 114, 105, 110, 103, 120, 66, 105, 110, 100, 75, 101, 121, 114,
+                105, 110, 103, 68, 97, 116, 97, 84, 111, 85, 115, 101, 114, 67, 111, 100, 101, 100,
+                78, 97, 109, 101,
+            ];
+            type Params = (String, super::KeyringData);
+            type Reply = super::KeyringEvent;
+        }
+        pub struct KeyringAccountData(());
+        impl KeyringAccountData {
+            #[allow(dead_code)]
+            pub fn encode_call(keyring_address: ActorId) -> Vec<u8> {
+                <KeyringAccountData as ActionIo>::encode_call(&keyring_address)
+            }
+        }
+        impl ActionIo for KeyringAccountData {
+            const ROUTE: &'static [u8] = &[
+                28, 75, 101, 121, 114, 105, 110, 103, 72, 75, 101, 121, 114, 105, 110, 103, 65, 99,
+                99, 111, 117, 110, 116, 68, 97, 116, 97,
+            ];
+            type Params = ActorId;
+            type Reply = super::KeyringQueryEvent;
+        }
+        pub struct KeyringAddressFromUserAddress(());
+        impl KeyringAddressFromUserAddress {
+            #[allow(dead_code)]
+            pub fn encode_call(user_address: ActorId) -> Vec<u8> {
+                <KeyringAddressFromUserAddress as ActionIo>::encode_call(&user_address)
+            }
+        }
+        impl ActionIo for KeyringAddressFromUserAddress {
+            const ROUTE: &'static [u8] = &[
+                28, 75, 101, 121, 114, 105, 110, 103, 116, 75, 101, 121, 114, 105, 110, 103, 65,
+                100, 100, 114, 101, 115, 115, 70, 114, 111, 109, 85, 115, 101, 114, 65, 100, 100,
+                114, 101, 115, 115,
+            ];
+            type Params = ActorId;
+            type Reply = super::KeyringQueryEvent;
+        }
+        pub struct KeyringAddressFromUserCodedName(());
+        impl KeyringAddressFromUserCodedName {
+            #[allow(dead_code)]
+            pub fn encode_call(user_coded_name: String) -> Vec<u8> {
+                <KeyringAddressFromUserCodedName as ActionIo>::encode_call(&user_coded_name)
+            }
+        }
+        impl ActionIo for KeyringAddressFromUserCodedName {
+            const ROUTE: &'static [u8] = &[
+                28, 75, 101, 121, 114, 105, 110, 103, 124, 75, 101, 121, 114, 105, 110, 103, 65,
+                100, 100, 114, 101, 115, 115, 70, 114, 111, 109, 85, 115, 101, 114, 67, 111, 100,
+                101, 100, 78, 97, 109, 101,
+            ];
+            type Params = String;
+            type Reply = super::KeyringQueryEvent;
+        }
+    }
+}
 pub struct TrafficLight<R> {
     remoting: R,
 }
@@ -62,55 +217,8 @@ impl<R: Remoting + Clone> traits::TrafficLight for TrafficLight<R> {
     fn yellow(&mut self) -> impl Call<Output = TrafficLightEvent, Args = R::Args> {
         RemotingAction::<_, traffic_light::io::Yellow>::new(self.remoting.clone(), ())
     }
-    fn bind_keyring_data_to_user_address(
-        &mut self,
-        user_address: ActorId,
-        keyring_data: KeyringData,
-    ) -> impl Call<Output = KeyringEvent, Args = R::Args> {
-        RemotingAction::<_, traffic_light::io::BindKeyringDataToUserAddress>::new(
-            self.remoting.clone(),
-            (user_address, keyring_data),
-        )
-    }
-    fn bind_keyring_data_to_user_coded_name(
-        &mut self,
-        user_coded_name: String,
-        keyring_data: KeyringData,
-    ) -> impl Call<Output = KeyringEvent, Args = R::Args> {
-        RemotingAction::<_, traffic_light::io::BindKeyringDataToUserCodedName>::new(
-            self.remoting.clone(),
-            (user_coded_name, keyring_data),
-        )
-    }
     fn traffic_light(&self) -> impl Query<Output = IoTrafficLightState, Args = R::Args> {
         RemotingAction::<_, traffic_light::io::TrafficLight>::new(self.remoting.clone(), ())
-    }
-    fn keyring_account_data(
-        &self,
-        keyring_address: ActorId,
-    ) -> impl Query<Output = KeyringQueryEvent, Args = R::Args> {
-        RemotingAction::<_, traffic_light::io::KeyringAccountData>::new(
-            self.remoting.clone(),
-            keyring_address,
-        )
-    }
-    fn keyring_address_from_user_address(
-        &self,
-        user_address: ActorId,
-    ) -> impl Query<Output = KeyringQueryEvent, Args = R::Args> {
-        RemotingAction::<_, traffic_light::io::KeyringAddressFromUserAddress>::new(
-            self.remoting.clone(),
-            user_address,
-        )
-    }
-    fn keyring_address_from_user_coded_name(
-        &self,
-        user_coded_name: String,
-    ) -> impl Query<Output = KeyringQueryEvent, Args = R::Args> {
-        RemotingAction::<_, traffic_light::io::KeyringAddressFromUserCodedName>::new(
-            self.remoting.clone(),
-            user_coded_name,
-        )
     }
 }
 
@@ -164,47 +272,6 @@ pub mod traffic_light {
             type Params = ();
             type Reply = super::TrafficLightEvent;
         }
-        pub struct BindKeyringDataToUserAddress(());
-        impl BindKeyringDataToUserAddress {
-            #[allow(dead_code)]
-            pub fn encode_call(user_address: ActorId, keyring_data: super::KeyringData) -> Vec<u8> {
-                <BindKeyringDataToUserAddress as ActionIo>::encode_call(&(
-                    user_address,
-                    keyring_data,
-                ))
-            }
-        }
-        impl ActionIo for BindKeyringDataToUserAddress {
-            const ROUTE: &'static [u8] = &[
-                48, 84, 114, 97, 102, 102, 105, 99, 76, 105, 103, 104, 116, 112, 66, 105, 110, 100,
-                75, 101, 121, 114, 105, 110, 103, 68, 97, 116, 97, 84, 111, 85, 115, 101, 114, 65,
-                100, 100, 114, 101, 115, 115,
-            ];
-            type Params = (ActorId, super::KeyringData);
-            type Reply = super::KeyringEvent;
-        }
-        pub struct BindKeyringDataToUserCodedName(());
-        impl BindKeyringDataToUserCodedName {
-            #[allow(dead_code)]
-            pub fn encode_call(
-                user_coded_name: String,
-                keyring_data: super::KeyringData,
-            ) -> Vec<u8> {
-                <BindKeyringDataToUserCodedName as ActionIo>::encode_call(&(
-                    user_coded_name,
-                    keyring_data,
-                ))
-            }
-        }
-        impl ActionIo for BindKeyringDataToUserCodedName {
-            const ROUTE: &'static [u8] = &[
-                48, 84, 114, 97, 102, 102, 105, 99, 76, 105, 103, 104, 116, 120, 66, 105, 110, 100,
-                75, 101, 121, 114, 105, 110, 103, 68, 97, 116, 97, 84, 111, 85, 115, 101, 114, 67,
-                111, 100, 101, 100, 78, 97, 109, 101,
-            ];
-            type Params = (String, super::KeyringData);
-            type Reply = super::KeyringEvent;
-        }
         pub struct TrafficLight(());
         impl TrafficLight {
             #[allow(dead_code)]
@@ -220,62 +287,7 @@ pub mod traffic_light {
             type Params = ();
             type Reply = super::IoTrafficLightState;
         }
-        pub struct KeyringAccountData(());
-        impl KeyringAccountData {
-            #[allow(dead_code)]
-            pub fn encode_call(keyring_address: ActorId) -> Vec<u8> {
-                <KeyringAccountData as ActionIo>::encode_call(&keyring_address)
-            }
-        }
-        impl ActionIo for KeyringAccountData {
-            const ROUTE: &'static [u8] = &[
-                48, 84, 114, 97, 102, 102, 105, 99, 76, 105, 103, 104, 116, 72, 75, 101, 121, 114,
-                105, 110, 103, 65, 99, 99, 111, 117, 110, 116, 68, 97, 116, 97,
-            ];
-            type Params = ActorId;
-            type Reply = super::KeyringQueryEvent;
-        }
-        pub struct KeyringAddressFromUserAddress(());
-        impl KeyringAddressFromUserAddress {
-            #[allow(dead_code)]
-            pub fn encode_call(user_address: ActorId) -> Vec<u8> {
-                <KeyringAddressFromUserAddress as ActionIo>::encode_call(&user_address)
-            }
-        }
-        impl ActionIo for KeyringAddressFromUserAddress {
-            const ROUTE: &'static [u8] = &[
-                48, 84, 114, 97, 102, 102, 105, 99, 76, 105, 103, 104, 116, 116, 75, 101, 121, 114,
-                105, 110, 103, 65, 100, 100, 114, 101, 115, 115, 70, 114, 111, 109, 85, 115, 101,
-                114, 65, 100, 100, 114, 101, 115, 115,
-            ];
-            type Params = ActorId;
-            type Reply = super::KeyringQueryEvent;
-        }
-        pub struct KeyringAddressFromUserCodedName(());
-        impl KeyringAddressFromUserCodedName {
-            #[allow(dead_code)]
-            pub fn encode_call(user_coded_name: String) -> Vec<u8> {
-                <KeyringAddressFromUserCodedName as ActionIo>::encode_call(&user_coded_name)
-            }
-        }
-        impl ActionIo for KeyringAddressFromUserCodedName {
-            const ROUTE: &'static [u8] = &[
-                48, 84, 114, 97, 102, 102, 105, 99, 76, 105, 103, 104, 116, 124, 75, 101, 121, 114,
-                105, 110, 103, 65, 100, 100, 114, 101, 115, 115, 70, 114, 111, 109, 85, 115, 101,
-                114, 67, 111, 100, 101, 100, 78, 97, 109, 101,
-            ];
-            type Params = String;
-            type Reply = super::KeyringQueryEvent;
-        }
     }
-}
-#[derive(PartialEq, Debug, Encode, Decode, TypeInfo)]
-#[codec(crate = sails_rs::scale_codec)]
-#[scale_info(crate = sails_rs::scale_info)]
-pub enum TrafficLightEvent {
-    Green,
-    Yellow,
-    Red,
 }
 #[derive(PartialEq, Debug, Encode, Decode, TypeInfo)]
 #[codec(crate = sails_rs::scale_codec)]
@@ -306,17 +318,25 @@ pub enum KeyringError {
 #[derive(PartialEq, Debug, Encode, Decode, TypeInfo)]
 #[codec(crate = sails_rs::scale_codec)]
 #[scale_info(crate = sails_rs::scale_info)]
-pub struct IoTrafficLightState {
-    pub current_light: String,
-    pub all_users: Vec<(ActorId, String)>,
-}
-#[derive(PartialEq, Debug, Encode, Decode, TypeInfo)]
-#[codec(crate = sails_rs::scale_codec)]
-#[scale_info(crate = sails_rs::scale_info)]
 pub enum KeyringQueryEvent {
     LastWhoCall(ActorId),
     SignlessAccountAddress(Option<ActorId>),
     SignlessAccountData(Option<KeyringData>),
+}
+#[derive(PartialEq, Debug, Encode, Decode, TypeInfo)]
+#[codec(crate = sails_rs::scale_codec)]
+#[scale_info(crate = sails_rs::scale_info)]
+pub enum TrafficLightEvent {
+    Green,
+    Yellow,
+    Red,
+}
+#[derive(PartialEq, Debug, Encode, Decode, TypeInfo)]
+#[codec(crate = sails_rs::scale_codec)]
+#[scale_info(crate = sails_rs::scale_info)]
+pub struct IoTrafficLightState {
+    pub current_light: String,
+    pub all_users: Vec<(ActorId, String)>,
 }
 
 pub mod traits {
@@ -330,11 +350,8 @@ pub mod traits {
     }
 
     #[allow(clippy::type_complexity)]
-    pub trait TrafficLight {
+    pub trait Keyring {
         type Args;
-        fn green(&mut self) -> impl Call<Output = TrafficLightEvent, Args = Self::Args>;
-        fn red(&mut self) -> impl Call<Output = TrafficLightEvent, Args = Self::Args>;
-        fn yellow(&mut self) -> impl Call<Output = TrafficLightEvent, Args = Self::Args>;
         fn bind_keyring_data_to_user_address(
             &mut self,
             user_address: ActorId,
@@ -345,7 +362,6 @@ pub mod traits {
             user_coded_name: String,
             keyring_data: KeyringData,
         ) -> impl Call<Output = KeyringEvent, Args = Self::Args>;
-        fn traffic_light(&self) -> impl Query<Output = IoTrafficLightState, Args = Self::Args>;
         fn keyring_account_data(
             &self,
             keyring_address: ActorId,
@@ -358,5 +374,14 @@ pub mod traits {
             &self,
             user_coded_name: String,
         ) -> impl Query<Output = KeyringQueryEvent, Args = Self::Args>;
+    }
+
+    #[allow(clippy::type_complexity)]
+    pub trait TrafficLight {
+        type Args;
+        fn green(&mut self) -> impl Call<Output = TrafficLightEvent, Args = Self::Args>;
+        fn red(&mut self) -> impl Call<Output = TrafficLightEvent, Args = Self::Args>;
+        fn yellow(&mut self) -> impl Call<Output = TrafficLightEvent, Args = Self::Args>;
+        fn traffic_light(&self) -> impl Query<Output = IoTrafficLightState, Args = Self::Args>;
     }
 }

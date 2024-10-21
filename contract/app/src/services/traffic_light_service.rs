@@ -10,16 +10,10 @@ use crate::states::traffic_light_state::{
     IoTrafficLightState
 };
 
-use keyring_service::services::{
-    keyring_service::KeyringService,
-    keyring_query_service::KeyringQueryService
-};
 
 // Traffic light service struct to build the service 
-pub struct TrafficLightService {
-    keyring_service: KeyringService,
-    keyring_query_service: KeyringQueryService
-}
+#[derive(Default)]
+pub struct TrafficLightService;
 
 // Impl for seed related function to init the state
 impl TrafficLightService {
@@ -33,14 +27,11 @@ impl TrafficLightService {
 }
 
 // Trffic light service
-#[service(extends = [KeyringService, KeyringQueryService])]
+#[service]
 impl TrafficLightService {
     // Service constructor
     pub fn new() -> Self {
-        Self {
-            keyring_service: KeyringService::new(),
-            keyring_query_service: KeyringQueryService::new()
-        }
+        Self
     }
 
     // Remote call "green" exposed to external consumers
@@ -111,22 +102,6 @@ impl TrafficLightService {
         TrafficLightState::state_ref()
             .to_owned()
             .into()
-    }
-}
-
-impl AsRef<KeyringService> for TrafficLightService {
-    fn as_ref(&self) -> &KeyringService {
-        // You have to return a reference to the attribute that 
-        // you specified to store the keyring service
-        &self.keyring_service
-    }
-}
-
-impl AsRef<KeyringQueryService> for TrafficLightService {
-    fn as_ref(&self) -> &KeyringQueryService {
-        // You have to return a reference to the attribute that 
-        // you specified to store the keyring query service
-        &self.keyring_query_service
     }
 }
 

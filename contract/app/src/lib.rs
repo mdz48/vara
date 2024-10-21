@@ -3,9 +3,12 @@
 // necesary crates
 use sails_rs::prelude::*;
 
+use keyring_service::services::keyring_service::KeyringService;
+
 // import our modules 
 pub mod states;
 pub mod services;
+
 
 // Import service to be used for the program
 use services::{
@@ -13,8 +16,6 @@ use services::{
     // signless_service::SignlessService,
     // query_service::QueryService
 };
-
-use keyring_service::services::keyring_service::KeyringService;
 
 // Traffic light program struct to build the program (there can only be one per contract)
 #[derive(Default)]
@@ -32,6 +33,11 @@ impl TrafficLightProgram {
         KeyringService::seed();
 
         Self
+    }
+
+    #[route("Keyring")]
+    pub fn keyring_svc(&self) -> KeyringService {
+        KeyringService::new()
     }
 
     // Method working with "&self", havind no other parameters are treated as exposed

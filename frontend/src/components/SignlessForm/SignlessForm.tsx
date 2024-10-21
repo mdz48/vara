@@ -94,7 +94,7 @@ export const SignlessForm = ({ closeForm, onGetKeyring }: Props) => {
 
         try {
             await sails.command(
-                'TrafficLight/BindKeyringDataToUserCodedName',
+                'Keyring/BindKeyringDataToUserCodedName',
                 newSignlessAccount,
                 {
                     voucherId: signlessVoucherId,
@@ -137,7 +137,7 @@ export const SignlessForm = ({ closeForm, onGetKeyring }: Props) => {
         const encryptedName = encryptString(accountName); // CryptoJs.SHA256(accountName).toString();
 
         let contractState: any = await sails.query(
-            'TrafficLight/KeyringAddressFromUserCodedName',
+            'Keyring/KeyringAddressFromUserCodedName',
             {
                 callArguments: [
                     encryptedName
@@ -154,7 +154,7 @@ export const SignlessForm = ({ closeForm, onGetKeyring }: Props) => {
         }
 
         contractState = await sails.query(
-            'TrafficLight/KeyringAccountData',
+            'Keyring/KeyringAccountData',
             {
                 callArguments: [
                     signlessAccountAddress

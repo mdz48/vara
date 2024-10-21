@@ -18,18 +18,12 @@ export const ROUTES = {
 };
 
 // To use the example code, enter the details of the account that will pay the vouchers, etc. (name and mnemonic)
-export const sponsorName = "admindavid";
-export const sponsorMnemonic = "strong orchard plastic arena pyramid lobster lonely rich stomach label clog rubber";
+export const sponsorName = "";
+export const sponsorMnemonic = "";
 
 export const CONTRACT_DATA: ContractSails = {
-  programId: '0x2919436134c607fa3ada4ea17266f1a44da58bb0ca232222e3acce0c90bc6c8c',
+  programId: '0x285b178b5ec7720e8ae614e2dc032b86c0135e8a8579fe80c07ab655062e791b',
   idl: `
-    type TrafficLightEvent = enum {
-      Green,
-      Yellow,
-      Red,
-    };
-
     type KeyringData = struct {
       address: str,
       encoded: str,
@@ -50,31 +44,40 @@ export const CONTRACT_DATA: ContractSails = {
       UserAndKeyringAddressAreTheSame,
     };
 
-    type IoTrafficLightState = struct {
-      current_light: str,
-      all_users: vec struct { actor_id, str },
-    };
-
     type KeyringQueryEvent = enum {
       LastWhoCall: actor_id,
       SignlessAccountAddress: opt actor_id,
       SignlessAccountData: opt KeyringData,
     };
 
+    type TrafficLightEvent = enum {
+      Green,
+      Yellow,
+      Red,
+    };
+
+    type IoTrafficLightState = struct {
+      current_light: str,
+      all_users: vec struct { actor_id, str },
+    };
+
     constructor {
       New : ();
+    };
+
+    service Keyring {
+      BindKeyringDataToUserAddress : (user_address: actor_id, keyring_data: KeyringData) -> KeyringEvent;
+      BindKeyringDataToUserCodedName : (user_coded_name: str, keyring_data: KeyringData) -> KeyringEvent;
+      query KeyringAccountData : (keyring_address: actor_id) -> KeyringQueryEvent;
+      query KeyringAddressFromUserAddress : (user_address: actor_id) -> KeyringQueryEvent;
+      query KeyringAddressFromUserCodedName : (user_coded_name: str) -> KeyringQueryEvent;
     };
 
     service TrafficLight {
       Green : () -> TrafficLightEvent;
       Red : () -> TrafficLightEvent;
       Yellow : () -> TrafficLightEvent;
-      BindKeyringDataToUserAddress : (user_address: actor_id, keyring_data: KeyringData) -> KeyringEvent;
-      BindKeyringDataToUserCodedName : (user_coded_name: str, keyring_data: KeyringData) -> KeyringEvent;
       query TrafficLight : () -> IoTrafficLightState;
-      query KeyringAccountData : (keyring_address: actor_id) -> KeyringQueryEvent;
-      query KeyringAddressFromUserAddress : (user_address: actor_id) -> KeyringQueryEvent;
-      query KeyringAddressFromUserCodedName : (user_coded_name: str) -> KeyringQueryEvent;
     };
   `
 };

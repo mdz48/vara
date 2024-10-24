@@ -1,0 +1,52 @@
+.form-denunciation {
+    background-color: #fff;
+    width: 90vh;
+    padding: 1.5rem; /* 6 = 1.5rem */
+    box-shadow: 2px 2px 14px -2px rgba(0, 0, 0, 0.26);
+}
+
+.form-title {
+    font-size: 2.5vh;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.45);
+    text-align: center;
+    padding: 1rem 0; /* Py-4 */
+}
+
+.form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem; /* 3 = 0.75rem */
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-text {
+    border: 0.1vh solid rgba(0, 0, 0, 0.36);
+    height: 2rem; /* 8 = 2rem */
+    width: 100%;
+    margin-top: 0.5rem; /* Mt-2 */
+}
+
+.input-textarea {
+    border: 0.1vh solid rgba(0, 0, 0, 0.36);
+    height: 7rem; /* 28 = 7rem */
+    width: 100%;
+    margin-top: 0.5rem; /* Mt-2 */
+}
+
+.input-select {
+    width: 100%;
+    border: 0.3vh solid rgba(0, 0, 0, 0.16);
+}
+
+.submit-button {
+    background-color: black;
+    color: white;
+    width: 100%;
+    padding: 0.5rem; /* P-2 */
+    font-size: 2.2vh;
+}

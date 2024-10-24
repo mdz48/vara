@@ -1,0 +1,66 @@
+.register-section {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 1.75rem; /* pt-7 */
+}
+
+.register-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* gap-5 */
+}
+
+.header {
+    padding: 2.5rem; /* p-10 */
+    text-align: center;
+    margin-top: 2.5rem; /* mt-10 */
+}
+
+.title {
+    font-size: 4vh; /* text-[4vh] */
+    font-weight: 600; /* font-semibold */
+}
+
+.header-description {
+    font-size: 2.3vh; /* text-[2.3vh] */
+    font-weight: 300; /* font-light */
+}
+
+.input-group {
+    display: flex;
+    gap: 1.25rem; /* gap-5 */
+}
+
+.input-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-field {
+    border: 1px solid #d1d5db; /* border-gray-300 */
+    padding: 0.5rem; /* p-2 */
+    width: 400px; /* w-[400px] */
+}
+
+.full-width {
+    width: 420px; /* w-[420px] */
+}
+
+.submit-button {
+    background-color: black;
+    color: white;
+    width: 100%;
+    padding: 0.75rem 0; /* py-3 pt-4 */
+    font-size: 2.3vh; /* text-[2.3vh] */
+}
+
+.image-container {
+    margin-left: 2.5rem; /* ml-10 */
+    display: flex;
+    align-items: center;
+    margin-top: 9rem; /* mt-36 */
+}
+
+.image {
+    height: 50vh; /* h-[50vh] */
+}

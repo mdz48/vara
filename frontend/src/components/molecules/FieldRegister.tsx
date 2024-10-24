@@ -1,24 +1,18 @@
 import Label from "../atoms/Label";
 import Input from "../atoms/Input";
+import './FieldRegister.css'; // Asegúrate de importar el archivo CSS
 
-
-function FieldRegister(props:any) {
+function FieldRegister(props: any) {
     return (
-        <div className="w-full h-[15%]">
-            <div className="w-full h-[35%] flex justify-start items-center pl-5">
-                <Label
-                text={props.text}
-                >
-                </Label>
+        <div className="field-register-container">
+            <div className="label-container">
+                <Label text={props.text} />
             </div>
-            <div className="w-full h-[65%] flex items-center justify-center">
-                <Input
-                    val={props.val}
-                    fnval={props.fnval}
-                ></Input>
+            <div className="input-container">
+                <Input val={props.val} fnval={props.fnval} />
             </div>
         </div>
-    )
+    );
 }
 
-export default FieldRegister; 
+export default FieldRegister;

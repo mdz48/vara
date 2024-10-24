@@ -1,3 +1,5 @@
+import './HacerDenuncia.css'; // Asegúrate de importar el archivo CSS
+
 function HacerDenuncia() {
     const categorias = [
         { value: 'Robo', label: 'Robo' },
@@ -14,29 +16,22 @@ function HacerDenuncia() {
         { value: 'Amenazas', label: 'Amenazas' },
         { value: 'Contaminacion ambiental', label: 'Contaminación ambiental' }
     ];
-    
 
     return ( 
-        <>
-            <div className="w-[100%] h-[40vh] 
-        bg-[url('fondo.png')] bg-no-repeat bg-cover ">
-
-            
-                <div className="flex justify-center text-white text-4xl">
-                    <p className="mt-28">Realizar denuncia</p>
-                </div>
-            
-                <div className="flex justify-center mt-4">
+        <div className="container">
+            <div className="header">
+                <p>Realizar denuncia</p>
+            </div>
+            <div className="select-container">
                 <select>
                     {categorias.map((option) => (
                         <option key={option.value} value={option.value}>
                             {option.label}
                         </option>
-                ))}
+                    ))}
                 </select>
-                </div>
             </div>
-        </>
+        </div>
     );
 }
 

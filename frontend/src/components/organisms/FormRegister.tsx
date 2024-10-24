@@ -1,47 +1,36 @@
-
 import FieldName from "../molecules/FieldName";
 import FieldRegister from "../molecules/FieldRegister";
 import Label from "../atoms/Label";
+import './FormRegister.css'; // Asegúrate de importar el archivo CSS
 
 function FormRegister() {
-    
-
-
-
     return (
-        <form className="w-[60vh] h-[63vh] bg-[#000000CC] flex-col rounded-lg">
-            <div className="flex justify-center items-center mt-9 text-4xl">
-                <p className="text-white">Registrate</p>
+        <form className="form-register">
+            <div className="form-header">
+                <p className="form-title">Regístrate</p>
             </div>
-            <div className="w-full h-[25%] flex justify-center items-center">
-                <FieldName
-                    title={"Primer Nombre"}
-                >
-                </FieldName>
-                <FieldName
-                    title={"Segundo nombre"}
-                ></FieldName>
-            </div>
-            
-            <div className="mb-2">
-                <div className="ml-4">
-                    <Label text={"Correo electronico"}></Label>
-                </div>
-            <FieldRegister>
-            </FieldRegister>
+            <div className="name-fields">
+                <FieldName title={"Primer Nombre"} />
+                <FieldName title={"Segundo nombre"} />
             </div>
 
-            <div className="mb-7">
-            <div className="ml-4">
-                    <Label text={"Contraseña"}></Label>
+            <div className="email-field">
+                <div className="label-container">
+                    <Label text={"Correo electrónico"} />
                 </div>
-            <FieldRegister>
-            </FieldRegister>
+                <FieldRegister />
             </div>
 
-            <div className="w-full h-[20%] flex justify-center items-center -mt-8">
+            <div className="password-field">
+                <div className="label-container">
+                    <Label text={"Contraseña"} />
+                </div>
+                <FieldRegister />
             </div>
-            <button >awea</button>
+
+            <div className="form-footer">
+                <button className="submit-button">Enviar</button>
+            </div>
         </form>
     )
 }

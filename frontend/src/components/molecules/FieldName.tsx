@@ -1,22 +1,18 @@
 import InputName from "../atoms/InputName";
 import Label from "../atoms/Label";
+import './FieldName.css'; // Asegúrate de importar el archivo CSS
 
-function FieldName(props:any) {
+function FieldName(props: any) {
     return (
-        <div className="w-full">
-            <div className="w-full h-[35%] flex justify-start items-center pl-5">
-                <Label
-                text={props.title}
-                ></Label>
+        <div className="field-name-container">
+            <div className="label-container">
+                <Label text={props.title} />
             </div>
-            <div className="w-full h-[65%]  flex justify-center items-center pt-2">
-                <InputName
-                val={props.val}
-                fnval={props.fnval}
-                ></InputName>
+            <div className="input-container">
+                <InputName val={props.val} fnval={props.fnval} />
             </div>
         </div>
-    )
+    );
 }
 
-export default FieldName; 
+export default FieldName;

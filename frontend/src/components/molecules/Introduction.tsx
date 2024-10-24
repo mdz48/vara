@@ -1,13 +1,12 @@
+import './Introduction.css'; // Asegúrate de importar el archivo CSS
 
 function Introduction() {
     return (
         <>
-            <div className="w-[100%] h-[50vh] 
-        bg-[url('introduction.jpg')] bg-no-repeat bg-cover flex items-center justify-center">
-
-                <div className="text-center">
-                    <p className="text-4xl text-white -mt-14">Bienvenidos</p>
-                    <p className="text-white text-center px-[20vw] mt-2 text-[2.7vh] opacity-90">
+            <div className="introduction-container">
+                <div className="introduction-text">
+                    <p className="welcome-title">Bienvenidos</p>
+                    <p className="welcome-description">
                         Bienvenido a AnonymousComplaint, la plataforma diseñada
                         para recibir denuncias anónimas de forma segura y
                         confidencial. Aquí, podrás reportar situaciones de
@@ -20,13 +19,11 @@ function Introduction() {
                     </p>
                 </div>
             </div>
-            <div className="flex justify-center">
-                <img src="signo.png" alt="" className="h-44 absolute -mt-20" />
+            <div className="image-container">
+                <img src="signo.png" alt="" className="sign-image" />
             </div>
-
-
             <div>
-
+                {/* Aquí puedes añadir más contenido si es necesario */}
             </div>
         </>
     );

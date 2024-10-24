@@ -1,10 +1,10 @@
+import './DatosEmpresa.css'; // Asegúrate de importar el archivo CSS
+
 function DatosEmpresa() {
     return ( 
-        <>
-            <div className="bg-slate-300">
-            
-            </div>
-        </>
+        <div className="container">
+            {/* Aquí puedes agregar más contenido si es necesario */}
+        </div>
     );
 }
 

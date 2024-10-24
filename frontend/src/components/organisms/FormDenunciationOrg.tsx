@@ -1,33 +1,32 @@
 import FormDenunciation from "../molecules/FormDenunciation";
+import './FormDenunciationOrg.css'; // Asegúrate de importar el archivo CSS
 
 function FormDenunciationOrg() {
     return ( 
         <>
-    <div className="flex justify-center items-center gap-5">
-            <div className="">
-                <img src="anonimo.png" alt="" className="h-14"/>
-            </div>
-
-        <div>
-            <div>
-                <div className="flex justify-center text-3xl font-semibold mt-12">
-                <p>Realiza tu denuncia</p>
-            </div>
-
-            <div className="flex justify-center">
-                <h2 className="text-2xl font-light">Categoria</h2>
-            </div>   
-
-
-            </div> 
-        </div>
-    </div>
-                <div className="flex justify-center pt-8">
-                    <FormDenunciation></FormDenunciation>
+            <div className="form-denunciation-org">
+                <div className="icon-container">
+                    <img src="anonimo.png" alt="" className="icon" />
                 </div>
 
+                <div className="text-container">
+                    <div className="header">
+                        <div className="header-title">
+                            <p className="title">Realiza tu denuncia</p>
+                        </div>
+
+                        <div className="header-category">
+                            <h2 className="category-text">Categoría</h2>
+                        </div>   
+                    </div> 
+                </div>
+            </div>
+
+            <div className="form-container">
+                <FormDenunciation />
+            </div>
         </>
-     );
+    );
 }
 
 export default FormDenunciationOrg;

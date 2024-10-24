@@ -1,0 +1,41 @@
+.introduction-container {
+    width: 100%;
+    height: 50vh;
+    background-image: url('introduction.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.introduction-text {
+    text-align: center;
+}
+
+.welcome-title {
+    font-size: 4rem; /* text-4xl */
+    color: white;
+    margin-top: -3.5rem; /* -mt-14 */
+}
+
+.welcome-description {
+    color: white;
+    text-align: center;
+    padding-left: 20vw; /* px-[20vw] */
+    padding-right: 20vw; /* px-[20vw] */
+    margin-top: 0.5rem; /* mt-2 */
+    font-size: 2.7vh;
+    opacity: 0.9;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+}
+
+.sign-image {
+    height: 11rem; /* h-44 */
+    position: absolute;
+    margin-top: -5rem; /* -mt-20 */
+}

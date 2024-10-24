@@ -1,0 +1,32 @@
+.header {
+    height: auto;
+    width: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    font-size: 2.4vh;
+}
+
+.header-text {
+    opacity: 0.55;
+}
+
+.header-actions {
+    display: flex;
+    gap: 2.25rem; /* 9 = 2.25rem */
+    margin-right: 1.25rem; /* 5 = 1.25rem */
+    align-items: center;
+}
+
+.header-link {
+    opacity: 0.55;
+}
+
+.register-button {
+    background-color: #C9D8F1;
+    opacity: 0.55;
+    padding: 0.5rem 2rem; /* px-8 py-2 */
+    border-radius: 0.375rem; /* rounded-md */
+}

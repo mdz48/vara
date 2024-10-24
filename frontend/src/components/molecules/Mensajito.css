@@ -1,0 +1,28 @@
+.text-center {
+    display: flex;
+    justify-content: center;
+}
+
+.message-title {
+    font-size: 2rem; /* text-2xl */
+    opacity: 0.6;
+    font-weight: bold;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    gap: 12rem; /* gap-48 */
+    margin-top: 2.5rem; /* mt-10 */
+}
+
+.image {
+    height: 30vh; /* h-[30vh] */
+}
+
+.card-container {
+    display: flex;
+    padding-left: 2.5rem; /* px-10 */
+    padding-right: 2.5rem; /* px-10 */
+    justify-content: center;
+}

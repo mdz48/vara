@@ -1,0 +1,55 @@
+.form-register {
+    width: 60vh;
+    height: 63vh;
+    background-color: rgba(0, 0, 0, 0.8); /* #000000CC */
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem; /* rounded-lg */
+}
+
+.form-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2.25rem; /* mt-9 */
+    font-size: 2rem; /* text-4xl */
+}
+
+.form-title {
+    color: white;
+}
+
+.name-fields {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.label-container {
+    margin-left: 1rem; /* ml-4 */
+}
+
+.email-field,
+.password-field {
+    margin-bottom: 0.5rem; /* mb-2 or mb-7 based on context */
+}
+
+.form-footer {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -2rem; /* -mt-8 */
+}
+
+.submit-button {
+    background-color: black;
+    color: white;
+    padding: 0.5rem 1rem; /* Puedes ajustar el padding según sea necesario */
+    border: none;
+    border-radius: 0.25rem; /* Puedes ajustar el borde si es necesario */
+    cursor: pointer;
+}

@@ -1,0 +1,43 @@
+.form-denunciation-org {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.25rem; /* gap-5 */
+}
+
+.icon-container {
+    /* Puedes agregar estilos adicionales si es necesario */
+}
+
+.icon {
+    height: 3.5rem; /* h-14 */
+}
+
+.text-container {
+    /* Puedes agregar estilos adicionales si es necesario */
+}
+
+.header {
+    text-align: center;
+    margin-top: 3rem; /* mt-12 */
+}
+
+.title {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 600; /* font-semibold */
+}
+
+.header-category {
+    /* Puedes agregar estilos adicionales si es necesario */
+}
+
+.category-text {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 300; /* font-light */
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 2rem; /* pt-8 */
+}

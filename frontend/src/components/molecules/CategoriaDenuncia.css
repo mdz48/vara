@@ -1,0 +1,29 @@
+.container {
+    width: 100%;
+    height: 40vh;
+    background-image: url('fondo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    color: white;
+    font-size: 2.5rem; /* equivalente a text-4xl */
+    margin-top: 7rem; /* equivalente a mt-28 */
+    display: flex;
+    justify-content: center;
+}
+
+.select-container {
+    margin-top: 1rem; /* equivalente a mt-4 */
+    display: flex;
+    justify-content: center;
+}
+
+select {
+    padding: 0.5rem; /* Puedes ajustar el padding según sea necesario */
+    font-size: 1rem; /* Puedes ajustar el tamaño de fuente si lo deseas */
+}

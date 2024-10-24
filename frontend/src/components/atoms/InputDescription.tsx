@@ -1,19 +1,16 @@
+import style from "../../components/atoms/atoms.module.css"; 
+function InputDescription(props: any) {
+    const handlerChange = (event: any) => {
+    props.fnval(event.target.value);
+    };
 
-
-
-function InputDescription(props:any) {
-
-    const handlerChange = (event:any) => {
-        props.fnval(event.target.value)
-    }
-    return(
-        <input
-        className="w-[90%] h-[90%] border border-silver-200 rounded-sm"
-        value={props.val}
+    return (
+      <input 
+        id={style.inputDescription} 
+        value={props.val} 
         onChange={handlerChange}
-        >
-        </input>
-    )
-}
-
-export default InputDescription;
+      />
+    );
+  }
+  
+  export default InputDescription;

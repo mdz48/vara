@@ -1,9 +1,10 @@
-function LabelForms(props:any) {
-    return ( 
-        <>
-        <label htmlFor="" className="text-[2.4vh]">{props.labelform}</label>
-        </>
+import style from "../../components/atoms/atoms.module.css"; 
+function LabelForms(props: any) {
+    return (
+      <label htmlFor={props.htmlFor} id={style.labelForms}>
+        {props.labelform}
+      </label>
     );
-}
-
-export default LabelForms;
+  }
+  
+  export default LabelForms;

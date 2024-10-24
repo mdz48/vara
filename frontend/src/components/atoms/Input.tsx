@@ -1,15 +1,16 @@
-
-
+import style from "../../components/atoms/atoms.module.css"; 
 function Input(props: any) {
-
     const handlerChange = (event: any) => {
-        props.fnval(event.target.value);
-    }
+    props.fnval(event.target.value);
+    };
 
     return (
-        <input className="w-[90%] h-10 bg-[#FFFFFF47] rounded-lg text-white" 
-        onChange={handlerChange} value={props.val}></input>
-    )
+    <input 
+        id={style.input} 
+        onChange={handlerChange} 
+        value={props.val}
+    />
+    );
 }
 
-export default Input; 
+export default Input;

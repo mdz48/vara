@@ -1,9 +1,8 @@
-
-
-function Label(props:any) {
-    return(
-        <label className="text-white text-[2.3vh] ml-2 mt-2">{props.text}</label>
-    )
-}
-
-export default Label; 
+import style from "../../components/atoms/atoms.module.css"; 
+function Label(props: any) {
+    return (
+    <label id={style.label}>{props.text}</label>
+    );
+  }
+  
+export default Label;

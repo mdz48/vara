@@ -11,6 +11,7 @@ export function formatDate(input: string | number): string {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
+    
   });
 }
 

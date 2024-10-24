@@ -14,6 +14,10 @@ export const ADDRESS = {
 export const ROUTES = {
   HOME: '/',
   EXAMPLES: '/examples',
+  DENUNTIATION: '/denuntiation',
+  EMPRESA: '/empresa',
+  HOUSE: '/house',
+  REGISTER: '/register',
   NOTFOUND: '*',
 };
 

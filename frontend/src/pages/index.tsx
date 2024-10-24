@@ -1,10 +1,13 @@
 import { Route, Routes, useLocation } from "react-router-dom";
-import Home from "./Home";
-import House from "./House";
+// import Home from "./Home";
+import Home from "./home/home";
+import Register from "./register/Register";
 
 const routes = [
   { path: "/", Page: Home },
-  { path: "/house", Page: House },
+  { path: "/register", Page: Register },
+  
+  // { path: "/house", Page: House },
 ];
 
 function Routing() {

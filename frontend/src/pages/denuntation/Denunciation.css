@@ -1,0 +1,9 @@
+.denuntiation-container {
+    min-height: 100vh;
+    background-color: rgba(32, 29, 29, 0.275); /* Similar al bg-[#201d1d46] */
+}
+
+.form-wrapper {
+    max-width: 640px; /* Equivalente a max-w-screen-sm */
+    margin: 0 auto; /* Equivalente a mx-auto */
+}
